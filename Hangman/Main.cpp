@@ -1,5 +1,8 @@
 #include <iostream>
-#include <string>
+#include <math.h>
+
+#include "Main.h"
+
 
 int lives;
 
@@ -9,11 +12,30 @@ const std::string WORLD_POOL[3] = {
 	"sdfg"
 };
 
-bool str_contains_letter(const std::string& string, const char& letter) {
+bool Hangman::str_contains_letter(const std::string& string, const char& letter) {
 	return string.find(letter) != std::string::npos;
 }
 
+void Hangman::print(const char* message) {
+	std::cout << message << std::endl;
+}
+
+void Hangman::start() {
+	Hangman::print("Starting Hangman! Picking word...");
+
+	std::cin.get();
+}
 
 int main() {
-	std::cout << str_contains_letter(WORLD_POOL[0], 'f') << std::endl;
+	Hangman::print("Welcome to Hangman! Press 1 to start and 2 to quit.");
+
+	int input;
+	std::cin >> input;
+
+	if (input == 1) {
+		Hangman::start();
+	}
+	else {
+		return EXIT_SUCCESS;
+	}
 }
