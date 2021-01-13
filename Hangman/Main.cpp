@@ -1,11 +1,30 @@
 #include <iostream>
 #include <fstream>
 #include <math.h>
+#include <time.h>
 
 #include "Main.h"
+#include "Util.h"
 
 
 int lives;
+
+std::string Hangman::reveal_word(const std::string& word, const std::string& hidden_word, const char& character) {
+	std::string output;
+	for (int i = 0; i < word.size(); i++) {
+		int index = std::ceil((float)i / 2);
+		if (word[i] == character) {
+			output += character + static_cast<std::string>(" ");
+		}
+		else if (hidden_word[i * 2] != '_' && hidden_word[i * 2] != (char)" ") {
+			output += hidden_word[i * 2] + static_cast<std::string>(" ");
+		}
+		else {
+			output += "_ ";
+		}
+	}
+	return output;
+}
 
 std::string Hangman::string_to_blank(const std::string& input) {
 	std::string output;
@@ -15,16 +34,14 @@ std::string Hangman::string_to_blank(const std::string& input) {
 	return output;
 }
 
-bool Hangman::str_contains_letter(const std::string& string, const char& letter) {
-	return string.find(letter) != std::string::npos;
-}
-
-int Hangman::random(int min, int max) {
-	return rand() % (max - min + 1) + min;
-}
-
-void Hangman::print(const char* message) {
-	std::cout << message << std::endl;
+bool Hangman::check_and_correct(const char& input, std::string& word, std::string& output) {
+	if (Util::str_contains_letter(word, input)) {
+		output = reveal_word(word, output, input);
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 void Hangman::load_words(std::vector<std::string>& words) {
@@ -40,26 +57,45 @@ void Hangman::load_words(std::vector<std::string>& words) {
 		}
 		world_file_stream.close();
 	}
-	else Hangman::print("Unable to load words");
+	else Util::print("Unable to load words");
+}
+
+void Hangman::main_loop(std::string& selected_word, std::string& hidden_word) {
+	Util::print("Type a letter and see if it's correct!");
+
+	char input;
+	std::cin >> input;
+
+	if (Hangman::check_and_correct(input, selected_word, hidden_word)) {
+		Util::print(hidden_word.c_str());
+	}
+	else {
+		Util::print("The word does not contain that letter!");
+	}
+	Hangman::main_loop(selected_word, hidden_word);
 }
 
 void Hangman::start() {
 	std::vector<std::string> words;
+	//words.push_back("Cat");
 	Hangman::load_words(words);
-	Hangman::print("Starting Hangman! Picking word...");
+	Util::print("Starting Hangman! Picking word...");
 
-	int random_index = Hangman::random(0, words.size());
+	std::srand(time(NULL));
+
+	int random_index = Util::random(0, words.size());
 	std::string selected_word = words[random_index];
-	Hangman::print("Word selected!");
-    Hangman::print(Hangman::string_to_blank(selected_word).c_str());
+	std::string hidden_word = Hangman::string_to_blank(selected_word);
+	Util::print("Word selected!");
+    Util::print(hidden_word.c_str());
 
 	lives = 5;
 
-	std::cin.get();
+	Hangman::main_loop(selected_word, hidden_word);
 }
 
 int main() {
-	Hangman::print("Welcome to Hangman! Press 1 to start and 2 to quit.");
+	Util::print("Welcome to Hangman! Press 1 to start and 2 to quit.");
 
 	int input;
 	std::cin >> input;
