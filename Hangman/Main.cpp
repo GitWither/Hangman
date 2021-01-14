@@ -6,21 +6,24 @@
 #include "Main.h"
 #include "Util.h"
 
-constexpr int MAX_LIVES = 5;
+constexpr int MAX_LIVES = 10;
 
 
 int lives;
 
 std::string Hangman::reveal_word(const std::string& word, const std::string& hidden_word, const char& character) {
 	std::string output;
+	//Iterate through all the characters in the word
 	for (unsigned int i = 0; i < word.size(); i++) {
-		int index = (int)std::ceil((float)i / 2);
-		if (std::tolower(*(&word[i])) == std::tolower(character)) {
+		//If current character is equal to the inputted character, add it to the output
+		if (word[i] == character) {
 			output += character + static_cast<std::string>(" ");
 		}
+		//Else, if the hidden word does not have an underscore or a space at the current index, add whatever it has to the output
 		else if (hidden_word[i * 2] != '_' && hidden_word[i * 2] != ' ') {
 			output += hidden_word[i * 2] + static_cast<std::string>(" ");
 		}
+		//Else, just add an underscore and a space to the output 
 		else {
 			output += "_ ";
 		}

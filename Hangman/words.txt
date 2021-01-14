@@ -1,17 +1,29 @@
 #animals
-Monkey
-Cat
-Tiger
+monkey
+cat
+tiger
+dog
+parrot
 
 #objects
-T-shirt
+t-shirt
+water
+lake
+river
+onion
+broccoli
+animal
 
 #video games
-Minecraft
+minecraft
+cyberpunk
 
 #abstract concepts
-Rupture
-Frustration
-Design
-Fear
-Armchair
+rupture
+frustration
+design
+fear
+armchair
+
+#adjectives
+big
