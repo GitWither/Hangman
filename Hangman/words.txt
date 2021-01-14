@@ -1,0 +1,17 @@
+#animals
+Monkey
+Cat
+Tiger
+
+#objects
+T-shirt
+
+#video games
+Minecraft
+
+#abstract concepts
+Rupture
+Frustration
+Design
+Fear
+Armchair

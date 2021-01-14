@@ -6,17 +6,19 @@
 #include "Main.h"
 #include "Util.h"
 
+constexpr int MAX_LIVES = 5;
+
 
 int lives;
 
 std::string Hangman::reveal_word(const std::string& word, const std::string& hidden_word, const char& character) {
 	std::string output;
-	for (int i = 0; i < word.size(); i++) {
-		int index = std::ceil((float)i / 2);
-		if (word[i] == character) {
+	for (unsigned int i = 0; i < word.size(); i++) {
+		int index = (int)std::ceil((float)i / 2);
+		if (std::tolower(*(&word[i])) == std::tolower(character)) {
 			output += character + static_cast<std::string>(" ");
 		}
-		else if (hidden_word[i * 2] != '_' && hidden_word[i * 2] != (char)" ") {
+		else if (hidden_word[i * 2] != '_' && hidden_word[i * 2] != ' ') {
 			output += hidden_word[i * 2] + static_cast<std::string>(" ");
 		}
 		else {
@@ -66,11 +68,25 @@ void Hangman::main_loop(std::string& selected_word, std::string& hidden_word) {
 	char input;
 	std::cin >> input;
 
-	if (Hangman::check_and_correct(input, selected_word, hidden_word)) {
-		Util::print(hidden_word.c_str());
+	//Check if player still has lives
+	if (lives > 1) {
+		//Check if word has been discovered yet
+		if (Hangman::check_and_correct(input, selected_word, hidden_word)) {
+			Util::print(hidden_word.c_str());
+			if (!Util::str_contains_letter(hidden_word, '_')) {
+				Util::print("You won!");
+				std::exit(EXIT_SUCCESS);
+			}
+		}
+		else {
+			lives--;
+			Util::print("The word does not contain that letter! Lives remaining:", lives);
+		}
 	}
+	//If not, print you lost
 	else {
-		Util::print("The word does not contain that letter!");
+		Util::print("You lost!");
+		std::exit(EXIT_SUCCESS);
 	}
 	Hangman::main_loop(selected_word, hidden_word);
 }
@@ -89,7 +105,7 @@ void Hangman::start() {
 	Util::print("Word selected!");
     Util::print(hidden_word.c_str());
 
-	lives = 5;
+	lives = MAX_LIVES;
 
 	Hangman::main_loop(selected_word, hidden_word);
 }
