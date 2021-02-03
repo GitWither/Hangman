@@ -7,6 +7,8 @@ set(CMAKE_COLOR_MAKEFILE   ON)
 
 project("hangman")
 
-add_executable("${PROJECT_NAME}" "hangman/include/Util.h" "hangman/include/Main.h" "hangman/src/Main.cpp" "hangman/src/Util.cpp")
+add_executable("${PROJECT_NAME}" "${PROJECT_NAME}/include/Util.h" "${PROJECT_NAME}/include/Main.h" "${PROJECT_NAME}/src/Main.cpp" "${PROJECT_NAME}/src/Util.cpp")
+
+configure_file("words.txt" "${CMAKE_CURRENT_BINARY_DIR}" COPYONLY)
 
 target_include_directories("${PROJECT_NAME}" PUBLIC "${PROJECT_NAME}/include")
